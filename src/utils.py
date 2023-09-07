@@ -1,4 +1,9 @@
 import ai21
+from fpdf import FPDF
+from langchain.chat_models import ChatOpenAI
+from langchain.document_loaders import WebBaseLoader
+from langchain.chains.summarize import load_summarize_chain
+from langchain.document_loaders import PyPDFLoader
 
 
 def get_text_segments(source: str, sourceType: str) -> list[str]:
@@ -54,4 +59,25 @@ def get_text_segments(source: str, sourceType: str) -> list[str]:
     # Return the list of segments
     return segments
 
-    
+
+def create_temporary_pdf(path, text):
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.set_font("Arial", size=12)
+    pdf.multi_cell(0, 10, text)
+    pdf.output(path)
+
+# create_temporary_pdf("archivo.pdf", "Este es un texto largo con la letra Ñ.")
+
+
+def load_pdf(path: str):
+
+    loader = PyPDFLoader(path)
+    docs = loader.load_and_split()
+
+    # print('pass')
+
+    llm = ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo-16k")
+    chain = load_summarize_chain(llm, chain_type="refine")
+
+    return chain.run(docs)
