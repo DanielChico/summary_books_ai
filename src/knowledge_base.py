@@ -1,41 +1,5 @@
-import faiss
-from langchain.memory import VectorStoreRetrieverMemory
-from langchain.vectorstores import FAISS
-from langchain.docstore import InMemoryDocstore
-from langchain.embeddings.openai import OpenAIEmbeddings
-from pathlib import Path
+import ai21
 
-
-def get_vector_store(file_path: str) -> FAISS:
-    """
-    Retrieves or creates a FAISS-based vector store using the given file path.
-
-    :param file_path: The path to the file where the vector store is saved or to be saved.
-    :return: The FAISS-based vector store.
-    """
-    vectorstore: FAISS
-
-    # If the vector store file doesn't exist, create a new one
-    if not Path(file_path).exists():
-        # Create FAISS-based vector store
-        embedding_size = 1536  # Dimensions of the OpenAIEmbeddings
-        index = faiss.IndexFlatL2(embedding_size)
-        embedding_function = OpenAIEmbeddings().embed_query
-        vectorstore = FAISS(embedding_function, index, InMemoryDocstore({}), {})
-
-        # Save a default context in the memory of the vector store
-        retriever = vectorstore.as_retriever()
-        memory = VectorStoreRetrieverMemory(retriever=retriever)
-        memory.save_context({"input": "."}, {"output": "."})
-
-        # Save the created vector store to the given file path
-        vectorstore.save_local(file_path)
-    # If the vector store exists, load it from the file
-    else:
-        vectorstore = FAISS.load_local(file_path, OpenAIEmbeddings())
-
-    return vectorstore
-    
 
 def get_text_segments(source: str, sourceType: str) -> list[str]:
     """
@@ -89,3 +53,5 @@ def get_text_segments(source: str, sourceType: str) -> list[str]:
 
     # Return the list of segments
     return segments
+
+    
