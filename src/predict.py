@@ -1,9 +1,7 @@
 import ai21
 from langchain import LLMChain
-from langchain.text_splitter import CharacterTextSplitter
+# from langchain.text_splitter import CharacterTextSplitter
 from langchain.chat_models.openai import ChatOpenAI
-
-from .knowledge_base import get_vector_store_memory
 from langchain import PromptTemplate
 
 
