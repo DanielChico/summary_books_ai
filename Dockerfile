@@ -1,4 +1,4 @@
-FROM python:alpine3.17
+FROM python:3.10.13-alpine3.17
 WORKDIR /app
 COPY ./requirements.txt .
 RUN python3 -m venv venv
