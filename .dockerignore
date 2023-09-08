@@ -1,0 +1,12 @@
+__pycache__/
+logs/*
+.git/
+venv/
+.gitignore
+*.db
+.gitlab-ci.yml
+Dockerfile
+README.md
+.idea/
+.dockerignore
+sample.env
